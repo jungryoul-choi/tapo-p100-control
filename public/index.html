@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tapo P100 제어</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        #onButton {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #offButton {
+            background-color: #f44336;
+            color: white;
+        }
+        #statusButton {
+            background-color: #2196F3;
+            color: white;
+            margin-top: 1rem;
+        }
+        #message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        #status {
+            margin-top: 1.5rem;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 1rem;
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tapo P100 스마트 플러그 제어</h1>
+        
+        <div class="button-container">
+            <button id="onButton">전원 켜기</button>
+            <button id="offButton">전원 끄기</button>
+        </div>
+        
+        <button id="statusButton">상태 확인</button>
+        
+        <div id="message" style="display: none;"></div>
+        <pre id="status"></pre>
+    </div>
+
+    <script>
+        document.getElementById('onButton').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/turnOn', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                showMessage(data.message, data.success);
+            } catch (error) {
+                showMessage('서버 연결 오류: ' + error, false);
+            }
+        });
+
+        document.getElementById('offButton').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/turnOff', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                showMessage(data.message, data.success);
+            } catch (error) {
+                showMessage('서버 연결 오류: ' + error, false);
+            }
+        });
+
+        document.getElementById('statusButton').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/status');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const statusElement = document.getElementById('status');
+                    statusElement.textContent = JSON.stringify(data.status, null, 2);
+                    statusElement.style.display = 'block';
+                } else {
+                    showMessage(data.message, false);
+                }
+            } catch (error) {
+                showMessage('서버 연결 오류: ' + error, false);
+            }
+        });
+
+        function showMessage(message, isSuccess) {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = message;
+            messageElement.className = isSuccess ? 'success' : 'error';
+            messageElement.style.display = 'block';
+            
+            setTimeout(() => {
+                messageElement.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
