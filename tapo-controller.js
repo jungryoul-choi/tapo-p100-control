@@ -14,7 +14,7 @@ const CONFIG = {
     password: 'onda123!',
     deviceMac: '28-87-BA-A8-9B-D4',
     deviceId: '80224DF05AAE2D913231A9A7364E7B1F1FDB7D96',
-    pythonScript: 'd:\\Project\\TapoP100Control\\tapo-web-app\\tapo_control.py'
+    pythonScript: './tapo_control.py'
 };
 
 // 장치 상태 저장

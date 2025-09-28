@@ -12,7 +12,7 @@ const { turnOn, turnOff, getDeviceInfo } = require('./tapo-controller');
 
 // 애플리케이션 설정
 const app = express();
-const port = process.env.PORT || 3001; // 포트 번호를 3001로 변경
+const port = process.env.PORT || 3000; // 포트 번호를 3000으로 변경
 
 // Middleware
 app.use(bodyParser.json());
