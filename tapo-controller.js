@@ -31,7 +31,7 @@ let deviceState = {
  */
 function runPythonScript(action) {
     return new Promise((resolve, reject) => {
-        exec(`python "${CONFIG.pythonScript}" ${action}`, (error, stdout, stderr) => {
+        exec(`python3 "${CONFIG.pythonScript}" ${action}`, (error, stdout, stderr) => {
             if (error) {
                 console.error(`Python 실행 오류: ${error.message}`);
                 reject(error);

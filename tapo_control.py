@@ -15,7 +15,7 @@ from datetime import datetime
 
 # 설정 정보
 CONFIG = {
-    "ip": "192.168.219.108",
+    "ip": "192.168.0.22",
     "email": "cjr1208@naver.com",
     "password": "onda123!"
 }
